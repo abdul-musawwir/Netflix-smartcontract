@@ -9,23 +9,10 @@ export default function Login ({setToken}){
     const [address,setAddress] = useState("")
     const [amount,setAmount] = useState("")
 
-    const {sendTransaction,withdrawTransaction,connectWallet} = useContext(netflixContext); 
-
-
-    // useEffect(async ()=>{
-    //     await connectWallet()
-    //     await sendTransaction()
-    // },[])
-
-    const handleConnect = async (e) => {
-        console.log("handle connect");
-        await connectWallet()
-        await sendTransaction()
-    }
+    const {charge,withdraw,connectWallet} = useContext(netflixContext); 
 
     const handleSubmit =  e => {
-        console.log(typeof(address),typeof(amount));
-        withdrawTransaction()
+        withdraw(address,amount)
       }
 
     return(
@@ -45,11 +32,13 @@ export default function Login ({setToken}){
                         <b>Amount&nbsp;&nbsp;&nbsp;</b>    
                     </label>    
                     
-                    <input type="text" name="Pass" id="Pass" placeholder="Amount" onChange={(e)=>{setAmount(e.target.value)}}/>    
-                    <br/><br/>    
-                    <input type="button" name="connect" id="log" value="Connect" onClick={handleConnect}/>  
+                    <input type="text" name="Pass" id="Pass" placeholder="Amount" onChange={(e)=>{setAmount(e.target.value)}}/>  
+                    <br/><br/>   
+                    <input type="button" name="connect" id="log" value="Connect wallet" onClick={connectWallet}/>
                     <br/>
-                    <input type="button" name="log" id="log" value="Transfer" onClick={handleSubmit}/>   
+                    <input type="button" name="log" id="log" value="Charge" onClick={charge}/>  
+                    
+                    <input type="button" name="log" id="log" value="Transfer" onClick={handleSubmit}/> 
                     
             </div>
             {/* <div class="imagelog">

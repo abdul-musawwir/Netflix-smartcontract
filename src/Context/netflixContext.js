@@ -17,7 +17,7 @@ const getEthereumContract = () => {
 export default function NetflixProvider({ children }) {
   const [currentAccount, setCurrentAccount] = useState("");
   
-  const checkIfWalletIsConnect = async () => {
+  const checkIfWalletIsConnected = async () => {
     try {
       if (!ethereum) return alert("Please install MetaMask.");
 
@@ -34,6 +34,7 @@ export default function NetflixProvider({ children }) {
   };
 
   const connectWallet = async () => {
+    console.log("wallet connect")
     try {
       if (!ethereum) return alert("Please install MetaMask.");
       const accounts = await ethereum.request({ method: "eth_requestAccounts", });
@@ -46,7 +47,7 @@ export default function NetflixProvider({ children }) {
     }
   };
 
-  const sendTransaction = async () => {
+  const charge = async () => {
     try {
       if (ethereum) {
         const netflixContract = getEthereumContract();
@@ -64,25 +65,15 @@ export default function NetflixProvider({ children }) {
     }
   };
 
-  const withdrawTransaction = async () => {
-    // console.log(addressTo,amount)
+  const withdraw = async (addressTo,amount) => {
     try {
       if (ethereum) {
-        const addressTo = "0xde1e8410aE4Cf09993C768E9100E835B492F5a2D";
+        // const addressTo = "0x1Ce9C0f635Acf07E12265481c9C860096b8954b9";
         const netflixContract = getEthereumContract();
-        const amount = "5";
+        // const amount = "5";
         const parsedAmount = ethers.utils.parseEther(amount);
+        console.log(addressTo,amount)
 
-        // await ethereum.request({
-        //   method: "eth_sendTransaction",
-        //   params: [{
-        //     from: currentAccount,
-        //     to: addressTo,
-        //     gas: "2DC6C0",
-        //     value: parsedAmount._hex,
-        //   }],
-        // });
-        // const someValue = BigInt(5000000000000000000);
         await netflixContract.withdraw(addressTo,parsedAmount._hex);
         window.location.reload();
       } else {
@@ -96,11 +87,11 @@ export default function NetflixProvider({ children }) {
   };
 
   useEffect(()=>{
-    checkIfWalletIsConnect();
+    checkIfWalletIsConnected();
   },[])
 
   return (
-    <netflixContext.Provider value={{connectWallet, currentAccount, sendTransaction, withdrawTransaction }}>
+    <netflixContext.Provider value={{connectWallet, currentAccount, charge, withdraw }}>
       {children}
     </netflixContext.Provider>
   )
